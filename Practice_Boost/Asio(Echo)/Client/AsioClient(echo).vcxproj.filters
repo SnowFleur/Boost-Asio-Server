@@ -10,5 +10,8 @@
     <ClCompile Include="EchoClient.cpp">
       <Filter>Client</Filter>
     </ClCompile>
+    <ClCompile Include="%28Async%29EchoClient.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -9,6 +9,7 @@ int main() {
 
     boost::asio::io_service io_service;
 
+    //from_string 형태로 변환
     boost::asio::ip::tcp::endpoint endpoint{ boost::asio::ip::address::from_string(SERVER_IP),PORT_NUMBER };
 
     boost::system::error_code connect_error;
@@ -16,7 +17,6 @@ int main() {
     boost::asio::ip::tcp::socket socket(io_service);
     
     socket.connect(endpoint, connect_error);
-
 
     if (connect_error) {
         std::cout << "연결 실패 error No:" << connect_error.value() << "Message: " << connect_error.message() << "\n";
@@ -60,7 +60,7 @@ int main() {
 
         }
 
-
+        // 네트워크 연결상태이면 true 
         if (socket.is_open()) {
             socket.close();
         }

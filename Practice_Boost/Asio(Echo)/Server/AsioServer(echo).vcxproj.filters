@@ -6,7 +6,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="echoServer.cpp">
+    <ClCompile Include="EchoServer.cpp">
+      <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="%28Async%29EchoServer.cpp">
       <Filter>Server</Filter>
     </ClCompile>
   </ItemGroup>
