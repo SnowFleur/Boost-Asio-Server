@@ -8,6 +8,7 @@
 #include"../protocol_generated.h"
 
 using namespace boost;
+using namespace ChatServerProtocol;
 
 constexpr   DWORD32     PORT_NUMBER             = 9000;
 constexpr   DWORD32     MAX_RECEIVE_BUF_SIZE    = 1028;
@@ -55,7 +56,20 @@ public:
     }
 
     inline void ProcessReceive(const boost::system::error_code& error, size_t bytes_transferred) {
-        std::cout << "Receive Packet Size: " << bytes_transferred << "\n";
+
+        if (error) {
+            std::cout << "error No: " << error.value() << " error Message: " << error.message() << std::endl;
+        }
+
+        else {
+            std::cout << "Receive Packet Size: " << bytes_transferred << "\n";
+
+            auto packet = Getsc_loginOk_packet(&receiveBuffer_);
+
+            std::cout << "ID: " << packet->session_id() << "\n";
+            PostReceive();
+        }
+
     }
 
     inline void ProcessConnect(const boost::system::error_code& error) {
@@ -65,7 +79,6 @@ public:
         }
         else {
             std::cout << "서버 접속 성공" << std::endl;
-
             PostReceive();
         }
 

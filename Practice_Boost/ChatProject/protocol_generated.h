@@ -11,9 +11,6 @@ namespace ChatServerProtocol {
 struct sc_loginOk_packet;
 struct sc_loginOk_packetBuilder;
 
-struct cs_send_message_packet;
-struct cs_send_message_packetBuilder;
-
 enum PacketType : int8_t {
   PacketType_sc_login_ok_ = 1,
   PacketType_cs_send_message = 2,
@@ -48,10 +45,14 @@ struct sc_loginOk_packet FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   typedef sc_loginOk_packetBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_SIZE = 4,
-    VT_TYPE = 6
+    VT_SESSION_ID = 6,
+    VT_TYPE = 8
   };
   uint8_t size() const {
     return GetField<uint8_t>(VT_SIZE, 0);
+  }
+  uint32_t session_id() const {
+    return GetField<uint32_t>(VT_SESSION_ID, 0);
   }
   ChatServerProtocol::PacketType type() const {
     return static_cast<ChatServerProtocol::PacketType>(GetField<int8_t>(VT_TYPE, 1));
@@ -59,6 +60,7 @@ struct sc_loginOk_packet FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_SIZE) &&
+           VerifyField<uint32_t>(verifier, VT_SESSION_ID) &&
            VerifyField<int8_t>(verifier, VT_TYPE) &&
            verifier.EndTable();
   }
@@ -70,6 +72,9 @@ struct sc_loginOk_packetBuilder {
   flatbuffers::uoffset_t start_;
   void add_size(uint8_t size) {
     fbb_.AddElement<uint8_t>(sc_loginOk_packet::VT_SIZE, size, 0);
+  }
+  void add_session_id(uint32_t session_id) {
+    fbb_.AddElement<uint32_t>(sc_loginOk_packet::VT_SESSION_ID, session_id, 0);
   }
   void add_type(ChatServerProtocol::PacketType type) {
     fbb_.AddElement<int8_t>(sc_loginOk_packet::VT_TYPE, static_cast<int8_t>(type), 1);
@@ -88,115 +93,42 @@ struct sc_loginOk_packetBuilder {
 inline flatbuffers::Offset<sc_loginOk_packet> Createsc_loginOk_packet(
     flatbuffers::FlatBufferBuilder &_fbb,
     uint8_t size = 0,
+    uint32_t session_id = 0,
     ChatServerProtocol::PacketType type = ChatServerProtocol::PacketType_sc_login_ok_) {
   sc_loginOk_packetBuilder builder_(_fbb);
+  builder_.add_session_id(session_id);
   builder_.add_type(type);
   builder_.add_size(size);
   return builder_.Finish();
 }
 
-struct cs_send_message_packet FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef cs_send_message_packetBuilder Builder;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_SIZE = 4,
-    VT_TYPE = 6,
-    VT_MESSAGE = 8
-  };
-  uint8_t size() const {
-    return GetField<uint8_t>(VT_SIZE, 0);
-  }
-  ChatServerProtocol::PacketType type() const {
-    return static_cast<ChatServerProtocol::PacketType>(GetField<int8_t>(VT_TYPE, 2));
-  }
-  const flatbuffers::String *message() const {
-    return GetPointer<const flatbuffers::String *>(VT_MESSAGE);
-  }
-  bool Verify(flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyField<uint8_t>(verifier, VT_SIZE) &&
-           VerifyField<int8_t>(verifier, VT_TYPE) &&
-           VerifyOffset(verifier, VT_MESSAGE) &&
-           verifier.VerifyString(message()) &&
-           verifier.EndTable();
-  }
-};
-
-struct cs_send_message_packetBuilder {
-  typedef cs_send_message_packet Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_size(uint8_t size) {
-    fbb_.AddElement<uint8_t>(cs_send_message_packet::VT_SIZE, size, 0);
-  }
-  void add_type(ChatServerProtocol::PacketType type) {
-    fbb_.AddElement<int8_t>(cs_send_message_packet::VT_TYPE, static_cast<int8_t>(type), 2);
-  }
-  void add_message(flatbuffers::Offset<flatbuffers::String> message) {
-    fbb_.AddOffset(cs_send_message_packet::VT_MESSAGE, message);
-  }
-  explicit cs_send_message_packetBuilder(flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  flatbuffers::Offset<cs_send_message_packet> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<cs_send_message_packet>(end);
-    return o;
-  }
-};
-
-inline flatbuffers::Offset<cs_send_message_packet> Createcs_send_message_packet(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    uint8_t size = 0,
-    ChatServerProtocol::PacketType type = ChatServerProtocol::PacketType_cs_send_message,
-    flatbuffers::Offset<flatbuffers::String> message = 0) {
-  cs_send_message_packetBuilder builder_(_fbb);
-  builder_.add_message(message);
-  builder_.add_type(type);
-  builder_.add_size(size);
-  return builder_.Finish();
+inline const ChatServerProtocol::sc_loginOk_packet *Getsc_loginOk_packet(const void *buf) {
+  return flatbuffers::GetRoot<ChatServerProtocol::sc_loginOk_packet>(buf);
 }
 
-inline flatbuffers::Offset<cs_send_message_packet> Createcs_send_message_packetDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    uint8_t size = 0,
-    ChatServerProtocol::PacketType type = ChatServerProtocol::PacketType_cs_send_message,
-    const char *message = nullptr) {
-  auto message__ = message ? _fbb.CreateString(message) : 0;
-  return ChatServerProtocol::Createcs_send_message_packet(
-      _fbb,
-      size,
-      type,
-      message__);
+inline const ChatServerProtocol::sc_loginOk_packet *GetSizePrefixedsc_loginOk_packet(const void *buf) {
+  return flatbuffers::GetSizePrefixedRoot<ChatServerProtocol::sc_loginOk_packet>(buf);
 }
 
-inline const ChatServerProtocol::cs_send_message_packet *Getcs_send_message_packet(const void *buf) {
-  return flatbuffers::GetRoot<ChatServerProtocol::cs_send_message_packet>(buf);
-}
-
-inline const ChatServerProtocol::cs_send_message_packet *GetSizePrefixedcs_send_message_packet(const void *buf) {
-  return flatbuffers::GetSizePrefixedRoot<ChatServerProtocol::cs_send_message_packet>(buf);
-}
-
-inline bool Verifycs_send_message_packetBuffer(
+inline bool Verifysc_loginOk_packetBuffer(
     flatbuffers::Verifier &verifier) {
-  return verifier.VerifyBuffer<ChatServerProtocol::cs_send_message_packet>(nullptr);
+  return verifier.VerifyBuffer<ChatServerProtocol::sc_loginOk_packet>(nullptr);
 }
 
-inline bool VerifySizePrefixedcs_send_message_packetBuffer(
+inline bool VerifySizePrefixedsc_loginOk_packetBuffer(
     flatbuffers::Verifier &verifier) {
-  return verifier.VerifySizePrefixedBuffer<ChatServerProtocol::cs_send_message_packet>(nullptr);
+  return verifier.VerifySizePrefixedBuffer<ChatServerProtocol::sc_loginOk_packet>(nullptr);
 }
 
-inline void Finishcs_send_message_packetBuffer(
+inline void Finishsc_loginOk_packetBuffer(
     flatbuffers::FlatBufferBuilder &fbb,
-    flatbuffers::Offset<ChatServerProtocol::cs_send_message_packet> root) {
+    flatbuffers::Offset<ChatServerProtocol::sc_loginOk_packet> root) {
   fbb.Finish(root);
 }
 
-inline void FinishSizePrefixedcs_send_message_packetBuffer(
+inline void FinishSizePrefixedsc_loginOk_packetBuffer(
     flatbuffers::FlatBufferBuilder &fbb,
-    flatbuffers::Offset<ChatServerProtocol::cs_send_message_packet> root) {
+    flatbuffers::Offset<ChatServerProtocol::sc_loginOk_packet> root) {
   fbb.FinishSizePrefixed(root);
 }
 

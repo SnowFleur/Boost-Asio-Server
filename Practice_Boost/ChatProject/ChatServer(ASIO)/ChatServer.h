@@ -81,13 +81,15 @@ public:
             flatbuffers::FlatBufferBuilder builder{};
 
             //데이터 직렬화
-            auto packet = Createsc_loginOk_packet(builder, sizeof(sc_loginOk_packet));
+            auto packet = Createsc_loginOk_packet(builder, sizeof(sc_loginOk_packet),pSession->GetSessionID());
             builder.Finish(packet);
 
           
             std::cout << "Send Packet Size: "<<builder.GetSize() << "\n";
 
             pSession->PostSend(false, builder.GetSize(), builder.GetBufferPointer());
+
+            PostAccept();
 
         }
     

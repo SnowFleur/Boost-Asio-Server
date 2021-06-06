@@ -1,17 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Client">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="FlatBuffer">
       <UniqueIdentifier>{79a761f3-4dfb-4bc1-9e02-739107181738}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ChatClient">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Client.cpp">
-      <Filter>Client</Filter>
+    <ClCompile Include="main.cpp">
+      <Filter>ChatClient</Filter>
+    </ClCompile>
+    <ClCompile Include="ChatClient.h">
+      <Filter>ChatClient</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

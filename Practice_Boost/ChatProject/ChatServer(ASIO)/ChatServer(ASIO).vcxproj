@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="ChatServer.h" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Session.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\protocol_generated.h" />

@@ -4,8 +4,11 @@
     <Filter Include="FlatBuffer">
       <UniqueIdentifier>{8da107e3-eb56-4ab3-a4c1-1ca2a4b66c95}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Main">
+    <Filter Include="ChatServer">
       <UniqueIdentifier>{87596c33-f5e5-4ea6-97c2-cdc8fda6f0bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Session">
+      <UniqueIdentifier>{5996817e-444c-4575-9cc8-eb0421a57ce8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -13,15 +16,18 @@
       <Filter>FlatBuffer</Filter>
     </ClInclude>
     <ClInclude Include="Session.h">
-      <Filter>Main</Filter>
+      <Filter>Session</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Main</Filter>
+      <Filter>ChatServer</Filter>
     </ClCompile>
     <ClCompile Include="ChatServer.h">
-      <Filter>Main</Filter>
+      <Filter>ChatServer</Filter>
+    </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>Session</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
